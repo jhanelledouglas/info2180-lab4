@@ -1,29 +1,24 @@
-window.addEventListener('load', function() {
-
-    let loadBtn = document.querySelector('#loadTextBtn');
-
-    loadBtn.addEventListener('click', function(element) {
-
-        element.preventDefault();
-
-        fetch("superheroes.php")
+window.onload = function() {
+    var form = document.getElementById('form');
 
 
-        .then(response => {
-                if (response.ok) {
-                    return response.text()
-                } else {
-                    return Promise.reject('something went wrong!')
-                }
-            })
-            .then(data => {
-                let search = document.querySelector('#search');
-                search.innerHTML = data;
-                alert(data);
+    form.addEventListener('submit', function(event) {
+        var formInput = document.getElementById('form-input').value;
+        event.preventDefault();
+
+        fetch('superheroes.php?' + new URLSearchParams({
+                query: `${formInput}`
+            }))
+            .then(data => data.text())
+            .then((text) => {
+
+                document.getElementById('result').innerHTML = text;
+            }).catch(function(error) {
+                console.error('request failed', error)
             })
 
-        .catch(error => console.log('There was an error: ' + error));
 
 
-    });
-});
+    })
+
+}
